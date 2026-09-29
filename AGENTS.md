@@ -8,6 +8,21 @@
 
 Cuando trabajes en este proyecto, DEBES seguir estas reglas:
 
+### 0. Leer Contexto del Sistema (OBLIGATORIO)
+
+**ANTES DE CUALQUIER OTRA ACCIÓN**, lee el archivo `SYSTEM_CONTEXT.md` ubicado en la raíz del proyecto.
+
+Este archivo contiene:
+- Arquitectura cliente-servidor tradicional
+- Estructura de capas en frontend y backend
+- Paquete dtos/ para tipos compartidos
+- Estrategia de persistencia
+- Tecnologías obligatorias
+- Decisiones técnicas y de negocio tomadas
+- Reglas específicas para herramientas de IA
+
+**NO procedas sin leer primero SYSTEM_CONTEXT.md.**
+
 ### 1. Registrar Todo en AI_USAGE_LOG.md
 
 Antes de realizar cualquier acción (crear archivo, modificar código, ejecutar comando, etc.), DEBES registrar la intención en el archivo `AI_USAGE_LOG.md` ubicado en la raíz del proyecto.
@@ -66,6 +81,12 @@ Este es un proyecto con las siguientes características:
 - Backend: Express + TypeScript
 - Persistencia: LocalStorage (frontend - backend (json no BBDD)) + JSON files (backend)
 - Integración: SnailPay (mock de pasarela de pagos)
+
+**Arquitectura acordada:**
+- Monolito con separación frontend-backend
+- Directorio `dtos/` compartido para tipos TypeScript
+- SnailPay como servicio interno del backend (mock)
+- JSON como "base de datos" (users.json, transactions.json)
 
 **Objetivo del registro:**
 El archivo `AI_USAGE_LOG.md` servirá como fuente de verdad para generar el reporte de uso de IA requerido en el PDF de entregables.

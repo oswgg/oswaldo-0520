@@ -1,0 +1,22 @@
+{
+  "name": "@oswaldo/dtos",
+  "version": "1.0.0",
+  "description": "Shared DTOs for SnailPay Betting App",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "clean": "rm -rf dist"
+  },
+  "keywords": [
+    "dtos",
+    "types",
+    "shared"
+  ],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "typescript": "^5.3.3"
+  }
+}
