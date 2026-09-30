@@ -101,57 +101,92 @@ frontend/
 
 ---
 
-## Backend - Arquitectura en Capas
+## Backend - Arquitectura Híbrida
+
+### Patrones Arquitectónicos
+
+El backend utiliza una arquitectura híbrida combinando:
+- **Dependency Injection (DI) Simplificada:** Inyección de dependencias manual
+- **Repository Pattern:** Abstracción del data layer
+- **Strategy Pattern:** Intercambio de algoritmos (encriptación, pagos)
+- **Service Locator Simple:** Centralización de dependencias
+
+**Justificación:** Flexibilidad para cambiar providers (data layer, encriptación) sin refactorización masiva, preparado para Tarea Adicional 2 (base de datos real). Documentado en `backend/ARCHITECTURE.md`.
 
 ### Estructura de Directorios
 
 ```
 backend/
 ├── src/
-│   ├── routes/              # Definición de rutas HTTP
-│   │   ├── auth.routes.ts   # /api/auth/*
-│   │   └── snailpay.routes.ts # /api/snailpay/*
-│   ├── controllers/         # Lógica de manejo de requests
-│   │   ├── auth.controller.ts
-│   │   └── snailpay.controller.ts
-│   ├── services/            # Lógica de negocio
-│   │   ├── snailpay.service.ts # Mock de pasarela de pagos
-│   │   └── json-db.service.ts   # Wrapper para archivos JSON
-│   ├── data/                # Capa de persistencia
-│   │   ├── users.json       # Usuarios registrados
-│   │   ├── transactions.json # Historial de transacciones
-│   │   └── snails.json      # 6 caracoles iniciales
-│   ├── middleware/          # Middleware Express
-│   │   └── auth.middleware.ts # Validación de sesión
-│   ├── types/               # Tipos TypeScript específicos del backend
-│   └── server.ts            # Punto de entrada del servidor
+│   ├── interfaces/                    # Interfaces de providers
+│   │   ├── IPasswordHasher.ts
+│   │   ├── IUserRepository.ts
+│   │   └── ISnailPayService.ts
+│   ├── repositories/                  # Implementaciones de data layer
+│   │   └── JsonUserRepository.ts
+│   ├── services/                      # Lógica de negocio
+│   │   ├── PasswordHasher/            # Implementaciones de hashing
+│   │   │   ├── Argon2Hasher.ts
+│   │   │   └── index.ts
+│   │   └── SnailPayService.ts
+│   ├── controllers/                   # Usan interfaces via DI
+│   │   └── AuthController.ts
+│   ├── middleware/                    # Middleware Express
+│   │   └── auth.middleware.ts
+│   ├── routes/                        # Definición de rutas
+│   │   └── auth.routes.ts
+│   ├── container.ts                   # Service locator simple
+│   ├── types/                         # Tipos TypeScript específicos
+│   ├── data/                          # Archivos JSON (persistencia)
+│   │   ├── users.json
+│   │   ├── transactions.json
+│   │   └── snails.json
+│   └── server.ts                      # Punto de entrada
+├── ARCHITECTURE.md                    # Documentación de arquitectura
 ├── package.json
 └── tsconfig.json
 ```
 
 ### Responsabilidades por Capa
 
+**Interfaces:**
+- Definición de contratos para providers
+- Abstracción de implementaciones concretas
+- Permiten cambio de implementaciones sin modificar código cliente
+
+**Repositories:**
+- Implementaciones de data layer (JsonUserRepository)
+- Operaciones CRUD sobre datos
+- Implementan interfaces de repositorios
+
+**Services:**
+- Lógica de negocio
+- Implementaciones de estrategias (Argon2Hasher, SnailPayService)
+- Implementan interfaces de servicios
+
+**Controllers:**
+- Manejo de request/response
+- Validación de inputs
+- Coordinación via DI (inyectan interfaces)
+- Respuestas HTTP apropiadas
+
+**Container:**
+- Service Locator simple
+- Registro y resolución de dependencias
+- Configuración centralizada de providers
+
 **Routes:**
 - Definición de endpoints HTTP
 - Enlace entre URL y controllers
 - Aplicación de middleware
 
-**Controllers:**
-- Manejo de request/response
-- Validación de inputs
-- Coordinación de services
-- Respuestas HTTP apropiadas
-
-**Services:**
-- Lógica de negocio
-- Reglas de dominio
-- Integración con servicios externos (SnailPay mock)
-- Abstracción de la capa de datos
+**Middleware:**
+- Validación de sesión (JWT + contador)
+- Interceptación de requests
 
 **Data:**
-- Persistencia en archivos JSON
-- Operaciones CRUD básicas
-- Sin lógica de negocio
+- Archivos JSON para persistencia
+- Datos iniciales (6 caracoles en snails.json)
 
 ---
 
@@ -263,6 +298,7 @@ La interfaz `ISnailPayService` permite reemplazar la implementación mock por un
 - **Backend:** Express + TypeScript
 - **Build Tool:** Vite (para React)
 - **Persistencia:** LocalStorage (frontend) + JSON files (backend)
+- **Package Manager:** pnpm (decisión de implementación)
 
 ### Librerías Adicionales (Por Definir)
 Aún no se definen librerías adicionales. Se evaluarán según necesidad durante implementación.
@@ -291,8 +327,8 @@ La arquitectura actual está diseñada pensando en la posibilidad de migrar a un
 El despliegue se considera como tarea adicional atractiva pero depende del tiempo disponible.
 
 **Plataformas a evaluar:**
-- Frontend: Vercel, Netlify
-- Backend: Railway, Render, Heroku
+- VPS propio (ya lo tengo)
+- Cloudflare
 
 ---
 
