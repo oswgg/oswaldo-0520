@@ -1,3 +1,11 @@
 {
-  "users": []
+  "users": [
+    {
+      "name": "Admin",
+      "email": "admin@prueba.com",
+      "passwordHash": "$2a$10$brdrzwz2F.jkgnU5mzyXk.JNSFU2cIrqNvV4dy2fN9LDSntVY0hpe",
+      "sessionCounter": 1,
+      "id": "16a3fa4a-f3b8-494a-be72-7356c7ddfd97"
+    }
+  ]
 }
