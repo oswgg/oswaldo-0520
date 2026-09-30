@@ -38,7 +38,6 @@ describe('authMiddleware', () => {
             name: 'Test User',
             email: 'test@example.com',
             passwordHash: 'hashedPassword',
-            balance: 100,
             sessionCounter: 1,
         };
 
@@ -126,7 +125,6 @@ describe('authMiddleware', () => {
             name: 'Test User',
             email: 'test@example.com',
             passwordHash: 'hashedPassword',
-            balance: 100,
             sessionCounter: 5, // Current counter in DB
         };
 

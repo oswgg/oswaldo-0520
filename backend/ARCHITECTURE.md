@@ -1,4 +1,4 @@
-# Arquitectura del Backend - SnailPay Betting App
+# Arquitectura del Backend - SnailPlay Betting App
 
 **Fecha de creación:** 2026-09-28
 **Arquitectura:** DI Simplificada + Repository Pattern + Strategy Pattern

@@ -1,7 +1,7 @@
 {
   "name": "oswaldo-backend",
   "version": "1.0.0",
-  "description": "Backend for SnailPay Betting App",
+  "description": "Backend for SnailPlay Betting App",
   "main": "dist/server.js",
   "scripts": {
     "dev": "ts-node-dev --respawn --transpile-only src/server.ts",

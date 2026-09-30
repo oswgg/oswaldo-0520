@@ -6,5 +6,4 @@ export interface ISnailPayService {
         userId: string,
         email: string,
     ): Promise<ChargeResponse>;
-    setSystemError(enabled: boolean): void;
 }

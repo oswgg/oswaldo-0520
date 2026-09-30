@@ -131,16 +131,15 @@ describe('SnailPayService', () => {
             );
         });
 
-        it('should return system error when system error is enabled', async () => {
+        it('should return system error when errorIntended is true', async () => {
             const request: ChargeRequest = {
                 cardNumber: '1234123412341234',
                 expiryDate: '12/26',
                 cvv: '543',
                 fullName: 'John Doe',
                 amount: 100,
+                errorIntended: true,
             };
-
-            (snailPayService as SnailPayService).setSystemError(true);
 
             const response = await snailPayService.processPayment(
                 request,
@@ -152,9 +151,6 @@ describe('SnailPayService', () => {
             expect(response.status_detail).toBe(
                 'System error: SnailPay service unavailable',
             );
-
-            // Reset for other tests
-            (snailPayService as SnailPayService).setSystemError(false);
         });
     });
 });

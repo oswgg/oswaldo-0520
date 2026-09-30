@@ -52,7 +52,6 @@ describe('AuthController', () => {
                 id: 'user-123',
                 ...requestBody,
                 passwordHash: 'hashedPassword',
-                balance: 0,
                 sessionCounter: 0,
             });
             (
@@ -61,7 +60,6 @@ describe('AuthController', () => {
                 id: 'user-123',
                 ...requestBody,
                 passwordHash: 'hashedPassword',
-                balance: 0,
                 sessionCounter: 1,
             });
 
@@ -79,7 +77,6 @@ describe('AuthController', () => {
                         id: 'user-123',
                         name: 'Test User',
                         email: 'test@example.com',
-                        balance: 0,
                         sessionCounter: 1,
                     }),
                 }),
@@ -151,7 +148,6 @@ describe('AuthController', () => {
                 name: 'Test User',
                 email: 'test@example.com',
                 passwordHash: 'hashedPassword',
-                balance: 100,
                 sessionCounter: 1,
             };
 
@@ -211,7 +207,6 @@ describe('AuthController', () => {
                 name: 'Test User',
                 email: 'test@example.com',
                 passwordHash: 'hashedPassword',
-                balance: 100,
                 sessionCounter: 1,
             };
 

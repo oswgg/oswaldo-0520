@@ -16,7 +16,7 @@ app.use('/api/snailpay', snailpayRoutes);
 
 // Health check
 app.get('/health', (req, res) => {
-    res.json({ status: 'ok', message: 'SnailPay Betting API is running' });
+    res.json({ status: 'ok', message: 'SnailPlay Betting API is running' });
 });
 
 // Start server

@@ -1,4 +1,4 @@
-# Contexto del Sistema - SnailPay Betting App
+# Contexto del Sistema - SnailPlay Betting App
 
 **Fecha de creación:** 2026-09-28
 **Última actualización:** 2026-09-28
@@ -275,11 +275,13 @@ La interfaz `ISnailPayService` permite reemplazar la implementación mock por un
 ## Estrategia de Persistencia
 
 ### Frontend - LocalStorage
-**Propósito:** Persistencia de sesión y estado del usuario en el navegador.
+**Propósito:** Persistencia de sesión, balance y transacciones en el navegador.
 
 **Datos almacenados:**
 - `sessionToken`: Token de sesión
-- `user`: Información del usuario (id, name, email, balance)
+- `user`: Información del usuario (id, name, email, sessionCounter)
+- `balance`: Saldo del usuario (simulación)
+- `transactions`: Historial de transacciones de SnailPay (simulación)
 
 **Consideraciones:**
 - No persistencia segura (solo para simulación)
@@ -290,14 +292,13 @@ La interfaz `ISnailPayService` permite reemplazar la implementación mock por un
 **Propósito:** Persistencia "real" de registros en el servidor.
 
 **Archivos:**
-- `users.json`: Usuarios registrados con passwords hasheados
-- `transactions.json`: Historial de transacciones de SnailPay
+- `users.json`: Usuarios registrados con passwords hasheados y sessionCounter
 - `snails.json`: 6 caracoles iniciales (datos semilla)
 
 **Consideraciones:**
-- Modificado por el usuario: decisión trasladada del frontend al backend para confidencialidad
 - Sin ACID transactions (aceptable para este scope)
 - Escalabilidad limitada (suficiente para prueba técnica)
+- Balance y transactions manejados en frontend (simulación)
 
 **Importante:** Todos los archivos de `backend/data/` están en el repositorio para que los datos iniciales (incluyendo los 6 caracoles) estén disponibles al clonar.
 

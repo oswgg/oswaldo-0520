@@ -3,12 +3,6 @@ import { ChargeRequest, ChargeResponse } from '@oswaldo/dtos';
 import { ISnailPayService } from '../interfaces/ISnailPayService';
 
 export class SnailPayService implements ISnailPayService {
-    private systemErrorEnabled = false;
-
-    setSystemError(enabled: boolean): void {
-        this.systemErrorEnabled = enabled;
-    }
-
     async processPayment(
         request: ChargeRequest,
         userId: string,
@@ -16,23 +10,6 @@ export class SnailPayService implements ISnailPayService {
     ): Promise<ChargeResponse> {
         // Error intencional (para pruebas de frontend)
         if (request.errorIntended) {
-            return {
-                id: uuidv4(),
-                status: 'rejected',
-                status_detail: 'Intentional error for testing purposes',
-                transaction_amount: request.amount,
-                date_created: new Date().toISOString(),
-                authorization_code: undefined,
-                reference: uuidv4(),
-                payer_id: userId,
-                payer_email: email,
-                cardNumber: request.cardNumber,
-                cvv: request.cvv,
-            };
-        }
-
-        // Error del sistema (toggle documentado)
-        if (this.systemErrorEnabled) {
             return {
                 id: uuidv4(),
                 status: 'error',
