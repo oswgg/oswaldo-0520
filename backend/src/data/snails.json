@@ -1,0 +1,32 @@
+[
+  {
+    "id": 1,
+    "name": "Speedy",
+    "color": "#FF6B6B"
+  },
+  {
+    "id": 2,
+    "name": "Turbo",
+    "color": "#4ECDC4"
+  },
+  {
+    "id": 3,
+    "name": "Flash",
+    "color": "#45B7D1"
+  },
+  {
+    "id": 4,
+    "name": "Bolt",
+    "color": "#96CEB4"
+  },
+  {
+    "id": 5,
+    "name": "Zoom",
+    "color": "#FFEAA7"
+  },
+  {
+    "id": 6,
+    "name": "Dash",
+    "color": "#DDA0DD"
+  }
+]
