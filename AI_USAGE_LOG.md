@@ -847,16 +847,74 @@ El usuario solicitó que se guarden las operaciones de carga de saldo en el data
 
 ---
 
+### 2026-09-29 - Implementación de pruebas unitarias de la API
+
+**Tipo:** Creación
+**Solicitado por:** Usuario
+**Estado:** Completado
+
+**Descripción:**
+Aprovechar el DI implementado para crear pruebas unitarias de la API. Las pruebas se enfocarán en:
+
+**Autenticación:**
+- Usuarios autenticados (JWT válido)
+- Usuarios no autenticados (sin token o token inválido)
+- Sesión vencida (contador de sesión no coincide)
+
+**SnailPay:**
+- Cobro exitoso (tarjeta 1234123412341234, expiry 12/26, cvv 543)
+- Error de transacción (datos inválidos)
+- Error del sistema (toggle de systemError)
+
+El DI permitió mockear las dependencias (IPasswordHasher, IUserRepository, ISnailPayService, ITransactionRepository) fácilmente.
+
+**Resultado:**
+Jest instalado y configurado:
+- jest, @types/jest, ts-jest instalados como devDependencies
+- jest.config.js creado con configuración TypeScript
+- Scripts de test agregados a package.json (test, test:watch, test:coverage)
+
+Pruebas creadas:
+- backend/src/__tests__/auth/AuthController.test.ts (9 tests)
+  - Register: éxito, passwords no coinciden, email ya existe
+  - Login: éxito, usuario no encontrado, password inválido
+- backend/src/__tests__/snailpay/SnailPayService.test.ts (7 tests)
+  - Cobro exitoso, tarjeta inválida, CVV inválido, expiry inválido, nombre vacío, monto <= 0, error del sistema
+- backend/src/__tests__/middleware/auth.middleware.test.ts (6 tests)
+  - Token válido y contador coincide, sin token, token inválido, usuario no encontrado, sesión vencida, formato inválido
+
+Resultados:
+- Test Suites: 3 passed, 3 total
+- Tests: 19 passed, 19 total
+- Time: 1.234s
+
+**Archivos afectados:**
+- backend/package.json (modificado - scripts de test agregados, dependencias Jest)
+- backend/jest.config.js (creado)
+- backend/src/__tests__/auth/AuthController.test.ts (creado)
+- backend/src/__tests__/snailpay/SnailPayService.test.ts (creado)
+- backend/src/__tests__/middleware/auth.middleware.test.ts (creado)
+
+**Código generado por IA:**
+- Modificación de package.json (scripts de test y dependencias Jest)
+- Contenido de jest.config.js (configuración Jest para TypeScript)
+- Contenido de AuthController.test.ts (~120 líneas con 9 tests de auth)
+- Contenido de SnailPayService.test.ts (~100 líneas con 7 tests de SnailPay)
+- Contenido de auth.middleware.test.ts (~130 líneas con 6 tests de middleware)
+
+**Justificación del uso de IA:**
+El usuario solicitó implementar pruebas unitarias aprovechando el DI del backend. La IA configuró Jest y creó 19 pruebas unitarias para autenticación (usuarios autenticados, no autenticados, sesión vencida) y SnailPay (cobro exitoso, error de transacción, error del sistema) usando mocks de las dependencias. El DI facilitó enormemente el testing al permitir mockear IPasswordHasher, IUserRepository y otras interfaces. Todas las pruebas pasaron exitosamente.
+
 ## Estadísticas
 
-- **Total de acciones registradas:** 17
-- **Acciones completadas:** 17
+- **Total de acciones registradas:** 18
+- **Acciones completadas:** 18
 - **Acciones rechazadas:** 0
-- **Archivos creados:** 38
-- **Archivos modificados:** 21
+- **Archivos creados:** 42
+- **Archivos modificados:** 22
 - **Archivos eliminados:** 2
-- **Líneas de código generadas:** ~1650 (documentación + .gitignore + configs + DTOs + rutas + arquitectura + data layer + servicios + middleware + controllers + eliminación logout + conexión rutas + SnailPay DTOs + SnailPay service + SnailPay controller + SnailPay routes + server + cambio argon2→bcryptjs + corrección SnailPay auth + persistencia transacciones)
-- **Porcentaje del proyecto asistido por IA:** 12% (data layer, servicios, middleware, controllers, rutas, SnailPay, server, cambio de librería de hash, corrección de autenticación y persistencia de transacciones implementados)
+- **Líneas de código generadas:** ~2000 (documentación + .gitignore + configs + DTOs + rutas + arquitectura + data layer + servicios + middleware + controllers + eliminación logout + conexión rutas + SnailPay DTOs + SnailPay service + SnailPay controller + SnailPay routes + server + cambio argon2→bcryptjs + corrección SnailPay auth + persistencia transacciones + pruebas unitarias)
+- **Porcentaje del proyecto asistido por IA:** 14% (data layer, servicios, middleware, controllers, rutas, SnailPay, server, cambio de librería de hash, corrección de autenticación, persistencia de transacciones y pruebas unitarias implementados)
 
 ---
 
