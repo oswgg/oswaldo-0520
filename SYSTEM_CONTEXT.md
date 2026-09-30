@@ -113,6 +113,18 @@ El backend utiliza una arquitectura híbrida combinando:
 
 **Justificación:** Flexibilidad para cambiar providers (data layer, encriptación) sin refactorización masiva, preparado para Tarea Adicional 2 (base de datos real). Documentado en `backend/ARCHITECTURE.md`.
 
+### Nota sobre Hash de Contraseñas
+
+Inicialmente se planificó usar Argon2 para hash de contraseñas por ser el algoritmo más seguro. Sin embargo, debido a problemas de compilación del módulo nativo en el entorno macOS con pnpm, se decidió cambiar a bcryptjs.
+
+**Decisión:** Usar bcryptjs en lugar de argon2 por:
+- **Simplicidad:** bcryptjs es una implementación pura en JavaScript sin dependencias nativas
+- **Sin problemas de compilación:** No requiere herramientas de build nativas
+- **Adecuado para el scope:** Suficientemente seguro para una prueba técnica
+- **Misma interfaz:** Mantiene el patrón Strategy Pattern con IPasswordHasher
+
+Esta decisión mantiene la arquitectura híbrida intacta (interfaz IPasswordHasher intercambiable) mientras simplifica el setup del proyecto.
+
 ### Estructura de Directorios
 
 ```
@@ -126,7 +138,7 @@ backend/
 │   │   └── JsonUserRepository.ts
 │   ├── services/                      # Lógica de negocio
 │   │   ├── PasswordHasher/            # Implementaciones de hashing
-│   │   │   ├── Argon2Hasher.ts
+│   │   │   ├── BcryptHasher.ts
 │   │   │   └── index.ts
 │   │   └── SnailPayService.ts
 │   ├── controllers/                   # Usan interfaces via DI
@@ -161,7 +173,7 @@ backend/
 
 **Services:**
 - Lógica de negocio
-- Implementaciones de estrategias (Argon2Hasher, SnailPayService)
+- Implementaciones de estrategias (BcryptHasher, SnailPayService)
 - Implementan interfaces de servicios
 
 **Controllers:**

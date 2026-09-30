@@ -1,1 +1,1 @@
-export { Argon2Hasher } from './Argon2Hasher';
+export { BcryptHasher } from './BcryptHasher';
