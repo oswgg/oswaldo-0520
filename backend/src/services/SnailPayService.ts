@@ -9,7 +9,28 @@ export class SnailPayService implements ISnailPayService {
         this.systemErrorEnabled = enabled;
     }
 
-    async processPayment(request: ChargeRequest, userId: string, email: string): Promise<ChargeResponse> {
+    async processPayment(
+        request: ChargeRequest,
+        userId: string,
+        email: string,
+    ): Promise<ChargeResponse> {
+        // Error intencional (para pruebas de frontend)
+        if (request.errorIntended) {
+            return {
+                id: uuidv4(),
+                status: 'rejected',
+                status_detail: 'Intentional error for testing purposes',
+                transaction_amount: request.amount,
+                date_created: new Date().toISOString(),
+                authorization_code: undefined,
+                reference: uuidv4(),
+                payer_id: userId,
+                payer_email: email,
+                cardNumber: request.cardNumber,
+                cvv: request.cvv,
+            };
+        }
+
         // Error del sistema (toggle documentado)
         if (this.systemErrorEnabled) {
             return {

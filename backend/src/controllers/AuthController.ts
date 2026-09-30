@@ -63,7 +63,6 @@ export class AuthController {
                 name: body.name,
                 email: body.email,
                 passwordHash,
-                balance: 0,
                 sessionCounter: 0,
             };
 
@@ -82,7 +81,6 @@ export class AuthController {
                     id: createdUser.id,
                     name: createdUser.name,
                     email: createdUser.email,
-                    balance: createdUser.balance,
                     sessionCounter: 1,
                 },
             };
@@ -158,7 +156,6 @@ export class AuthController {
                     id: updatedUser.id,
                     name: updatedUser.name,
                     email: updatedUser.email,
-                    balance: updatedUser.balance,
                     sessionCounter: updatedUser.sessionCounter,
                 },
             };

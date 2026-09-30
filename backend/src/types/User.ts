@@ -3,6 +3,5 @@ export interface User {
     name: string;
     email: string;
     passwordHash: string;
-    balance: number;
     sessionCounter: number;
 }

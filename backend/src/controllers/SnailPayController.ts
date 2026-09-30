@@ -1,14 +1,12 @@
 import { Request, Response } from 'express';
 import { ISnailPayService } from '../interfaces/ISnailPayService';
 import { IUserRepository } from '../interfaces/IUserRepository';
-import { ITransactionRepository } from '../interfaces/ITransactionRepository';
 import { ChargeRequest, ChargeResponse } from '@oswaldo/dtos';
 
 export class SnailPayController {
     constructor(
         private snailPayService: ISnailPayService,
         private userRepo: IUserRepository,
-        private transactionRepo: ITransactionRepository,
     ) {}
 
     async charge(req: Request, res: Response): Promise<void> {
@@ -48,26 +46,7 @@ export class SnailPayController {
                     user.email,
                 );
 
-            // Si el pago fue exitoso, actualizar el saldo del usuario y guardar transacción
-            if (paymentResponse.status === 'approved') {
-                const newBalance =
-                    user.balance + paymentResponse.transaction_amount;
-                await this.userRepo.update(user.id, { balance: newBalance });
-
-                // Guardar transacción en el data layer
-                await this.transactionRepo.create({
-                    userId: user.id,
-                    userEmail: user.email,
-                    amount: paymentResponse.transaction_amount,
-                    status: paymentResponse.status,
-                    statusDetail: paymentResponse.status_detail,
-                    transactionId: paymentResponse.id,
-                    cardNumber: paymentResponse.cardNumber,
-                    cvv: paymentResponse.cvv,
-                    dateCreated: paymentResponse.date_created,
-                });
-            }
-
+            // Devolver respuesta al frontend (frontend actualizará balance según status)
             res.status(200).json(paymentResponse);
         } catch (error) {
             console.error('Charge error:', error);
