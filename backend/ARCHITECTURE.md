@@ -169,7 +169,40 @@ class Container {
 
 ---
 
+## Controllers
 
+**Concepto:** Coordinadores de request/response que usan interfaces via DI manual.
+
+**Implementación:**
+- DI manual en constructors (inyectar interfaces, no implementaciones)
+- Lógica de coordinación entre services y repositories
+- Validación de inputs
+- Manejo de errores
+- Respuestas HTTP apropiadas
+
+**Ventajas:**
+- Fácil de testear (mock de dependencias)
+- Desacoplado de implementaciones concretas
+- Lógica de negocio coordinada centralizada
+
+**Ejemplo:**
+```typescript
+class AuthController {
+  constructor(
+    private passwordHasher: IPasswordHasher,
+    private userRepo: IUserRepository
+  ) {}
+  
+  async register(req: Request, res: Response) {
+    const passwordHash = await this.passwordHasher.hash(req.body.password);
+    const user = await this.userRepo.create({ ...req.body, passwordHash });
+    const token = this.generateToken(user);
+    res.json({ success: true, token, user });
+  }
+}
+```
+
+---
 
 ## Estructura de Directorios
 
@@ -203,7 +236,67 @@ backend/src/
 
 ---
 
+## Flujo Completo de Autenticación
 
+### Registro de Usuario
+
+```
+1. Client → POST /api/auth/register
+2. Routes → AuthController.register()
+3. AuthController:
+   - Valida inputs (email, password, confirmPassword)
+   - Verifica que email no exista (via IUserRepository)
+   - Hash password con Argon2 (via IPasswordHasher)
+   - Crea usuario con sessionCounter = 0 (via IUserRepository)
+   - Genera JWT con sessionCounter = 1
+   - Incrementa sessionCounter en usuario (via IUserRepository)
+   - Retorna token + user
+4. Client guarda token en LocalStorage
+```
+
+### Login de Usuario
+
+```
+1. Client → POST /api/auth/login
+2. Routes → AuthController.login()
+3. AuthController:
+   - Valida inputs (email, password)
+   - Busca usuario por email (via IUserRepository)
+   - Verifica password con Argon2 (via IPasswordHasher)
+   - Incrementa sessionCounter (via IUserRepository)
+   - Genera JWT con nuevo sessionCounter
+   - Retorna token + user
+4. Client guarda token en LocalStorage
+5. Sesiones anteriores quedan invalidadas (contador no coincide)
+```
+
+### Validación de Sesión (Middleware)
+
+```
+1. Client → Request con Authorization: Bearer <token>
+2. Middleware authMiddleware:
+   - Extrae token del header
+   - Verifica firma JWT
+   - Extrae userId y sessionCounter del JWT
+   - Busca usuario en DB (via IUserRepository)
+   - Compara sessionCounter del JWT vs DB
+   - Si coincide: adjunta user al request
+   - Si no coincide: retorna 401 (sesión inválida)
+3. Routes → Controllers → (user disponible en req.user)
+```
+
+### Logout
+
+```
+1. Client → POST /api/auth/logout
+2. Routes → AuthController.logout()
+3. AuthController:
+   - Retorna success (logout es principalmente client-side)
+4. Client elimina token de LocalStorage
+5. Siguiente request sin token → 401 (no autenticado)
+```
+
+---
 
 ## Flujo de Dependencias
 

@@ -1,47 +1,21 @@
 import { Router } from 'express';
-import { RegisterRequest, LoginRequest } from '@oswaldo/dtos';
+import { AuthController } from '../controllers/AuthController';
+import { IPasswordHasher } from '../interfaces/IPasswordHasher';
+import { IUserRepository } from '../interfaces/IUserRepository';
+import { Argon2Hasher } from '../services/PasswordHasher/Argon2Hasher';
+import { JsonUserRepository } from '../repositories/JsonUserRepository';
 
 const router = Router();
 
+// Setup dependencies (DI manual)
+const passwordHasher: IPasswordHasher = new Argon2Hasher();
+const userRepo: IUserRepository = new JsonUserRepository();
+const authController = new AuthController(passwordHasher, userRepo);
+
 // POST /api/auth/register
-router.post('/register', async (req, res) => {
-    try {
-        const body: RegisterRequest = req.body;
-        // TODO: Implementar lógica de registro en controller
-        res.status(501).json({ success: false, error: 'Not implemented yet' });
-    } catch (error) {
-        res.status(500).json({
-            success: false,
-            error: 'Internal server error',
-        });
-    }
-});
+router.post('/register', (req, res) => authController.register(req, res));
 
 // POST /api/auth/login
-router.post('/login', async (req, res) => {
-    try {
-        const body: LoginRequest = req.body;
-        // TODO: Implementar lógica de login en controller
-        res.status(501).json({ success: false, error: 'Not implemented yet' });
-    } catch (error) {
-        res.status(500).json({
-            success: false,
-            error: 'Internal server error',
-        });
-    }
-});
-
-// POST /api/auth/logout
-router.post('/logout', async (req, res) => {
-    try {
-        // TODO: Implementar lógica de logout en controller
-        res.status(501).json({ success: false, error: 'Not implemented yet' });
-    } catch (error) {
-        res.status(500).json({
-            success: false,
-            error: 'Internal server error',
-        });
-    }
-});
+router.post('/login', (req, res) => authController.login(req, res));
 
 export default router;
