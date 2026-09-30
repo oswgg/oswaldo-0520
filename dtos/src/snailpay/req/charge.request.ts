@@ -4,6 +4,4 @@ export interface ChargeRequest {
     cvv: string;
     fullName: string;
     amount: number;
-    userId: string;
-    email: string;
 }

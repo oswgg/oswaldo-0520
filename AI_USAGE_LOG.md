@@ -741,16 +741,122 @@ El usuario solicitó cambiar de argon2 a bcryptjs por simplicidad, prefiriendo e
 
 ---
 
+### 2026-09-29 - Corrección de SnailPay: obtener usuario del token JWT
+
+**Tipo:** Modificación
+**Solicitado por:** Usuario
+**Estado:** Completado
+
+**Descripción:**
+SnailPay no debería recibir userId y email del body del request. Estos datos deben obtenerse del token JWT vía el middleware de autenticación. Esto es más seguro y sigue mejores prácticas de autenticación.
+
+Cambios realizados:
+- Modificar ChargeRequest DTO para quitar userId y email
+- Modificar ISnailPayService para recibir userId y email como parámetros
+- Modificar SnailPayService para usar userId y email de parámetros
+- Modificar SnailPayController para obtener usuario del request (adjuntado por middleware)
+- Aplicar middleware de autenticación a la ruta /api/snailpay/charge
+
+**Resultado:**
+DTO modificado:
+- dtos/src/snailpay/req/charge.request.ts actualizado (userId y email eliminados)
+
+Backend modificado:
+- backend/src/interfaces/ISnailPayService.ts actualizado (processPayment ahora recibe userId y email)
+- backend/src/services/SnailPayService.ts actualizado (usar userId y email de parámetros en lugar de request)
+- backend/src/controllers/SnailPayController.ts actualizado (obtener usuario de req.user, validación de usuario eliminada ya que middleware lo hace)
+- backend/src/routes/snailpay.routes.ts actualizado (agregado authMiddleware a ruta /charge)
+
+Build e instalación:
+- Build de dtos/ ejecutado exitosamente
+- Dependencias de frontend y backend reinstaladas
+
+**Archivos afectados:**
+- dtos/src/snailpay/req/charge.request.ts (modificado - userId y email eliminados)
+- backend/src/interfaces/ISnailPayService.ts (modificado - processPayment signature actualizada)
+- backend/src/services/SnailPayService.ts (modificado - usar parámetros userId y email)
+- backend/src/controllers/SnailPayController.ts (modificado - obtener usuario de req.user)
+- backend/src/routes/snailpay.routes.ts (modificado - agregar authMiddleware)
+
+**Código generado por IA:**
+- Modificación de charge.request.ts (eliminados userId y email)
+- Modificación de ISnailPayService.ts (signature actualizada)
+- Modificación de SnailPayService.ts (usar parámetros en lugar de request.userId)
+- Modificación de SnailPayController.ts (obtener usuario de req.user, eliminar validaciones duplicadas)
+- Modificación de snailpay.routes.ts (agregar authMiddleware)
+
+**Justificación del uso de IA:**
+El usuario señaló que SnailPay no debería necesitar userId y email del body, sino obtenerlos del token JWT vía middleware de autenticación. La IA modificó el DTO, interfaz, servicio, controller y rutas para seguir mejores prácticas de seguridad y autenticación. Ahora la ruta /api/snailpay/charge requiere autenticación y obtiene userId y email del token JWT, lo cual es más seguro y estándar.
+
+---
+
+### 2026-09-29 - Implementación de persistencia de transacciones
+
+**Tipo:** Creación
+**Solicitado por:** Usuario
+**Estado:** Completado
+
+**Descripción:**
+Guardar las operaciones de carga de saldo que hace el usuario en el data layer. Según SYSTEM_CONTEXT.md, debe existir transactions.json para el historial de transacciones de SnailPay.
+
+Cambios realizados:
+- Crear backend/src/data/transactions.json
+- Crear interfaz ITransactionRepository
+- Crear JsonTransactionRepository (implementación)
+- Crear tipo Transaction
+- Modificar SnailPayController para guardar transacción cuando sea exitosa
+- Modificar snailpay.routes.ts para inyectar ITransactionRepository
+
+**Resultado:**
+Tipos creados:
+- backend/src/types/Transaction.ts (interface con campos de transacción)
+
+Interfaces creadas:
+- backend/src/interfaces/ITransactionRepository.ts (interface con create y findByUserId)
+
+Repositorio creado:
+- backend/src/repositories/JsonTransactionRepository.ts (~45 líneas con implementación completa de CRUD en JSON)
+
+Data creada:
+- backend/src/data/transactions.json (estructura inicial con array vacío)
+
+Controller modificado:
+- backend/src/controllers/SnailPayController.ts actualizado (DI de ITransactionRepository, guardar transacción cuando status === 'approved')
+
+Rutas modificadas:
+- backend/src/routes/snailpay.routes.ts actualizado (DI de JsonTransactionRepository)
+
+**Archivos afectados:**
+- backend/src/types/Transaction.ts (creado)
+- backend/src/interfaces/ITransactionRepository.ts (creado)
+- backend/src/repositories/JsonTransactionRepository.ts (creado)
+- backend/src/data/transactions.json (creado)
+- backend/src/controllers/SnailPayController.ts (modificado - DI de transactionRepo, guardar transacción)
+- backend/src/routes/snailpay.routes.ts (modificado - DI de transactionRepo)
+
+**Código generado por IA:**
+- Contenido de Transaction.ts (interface con 10 campos)
+- Contenido de ITransactionRepository.ts (interface con 2 métodos)
+- Contenido de JsonTransactionRepository.ts (~45 líneas con implementación CRUD en JSON)
+- Contenido de transactions.json (estructura inicial)
+- Modificación de SnailPayController.ts (agregado DI y lógica de guardado)
+- Modificación de snailpay.routes.ts (agregado DI de transactionRepo)
+
+**Justificación del uso de IA:**
+El usuario solicitó que se guarden las operaciones de carga de saldo en el data layer. La IA implementó el repositorio de transacciones siguiendo el patrón Repository Pattern de la arquitectura híbrida, con interfaz ITransactionRepository intercambiable para futura migración a base de datos real. Las transacciones se guardan en transactions.json cuando el pago es exitoso, manteniendo el historial de operaciones del usuario.
+
+---
+
 ## Estadísticas
 
-- **Total de acciones registradas:** 15
-- **Acciones completadas:** 15
+- **Total de acciones registradas:** 17
+- **Acciones completadas:** 17
 - **Acciones rechazadas:** 0
-- **Archivos creados:** 34
-- **Archivos modificados:** 14
+- **Archivos creados:** 38
+- **Archivos modificados:** 21
 - **Archivos eliminados:** 2
-- **Líneas de código generadas:** ~1580 (documentación + .gitignore + configs + DTOs + rutas + arquitectura + data layer + servicios + middleware + controllers + eliminación logout + conexión rutas + SnailPay DTOs + SnailPay service + SnailPay controller + SnailPay routes + server + cambio argon2→bcryptjs)
-- **Porcentaje del proyecto asistido por IA:** 10% (data layer, servicios, middleware, controllers, rutas, SnailPay, server y cambio de librería de hash implementados)
+- **Líneas de código generadas:** ~1650 (documentación + .gitignore + configs + DTOs + rutas + arquitectura + data layer + servicios + middleware + controllers + eliminación logout + conexión rutas + SnailPay DTOs + SnailPay service + SnailPay controller + SnailPay routes + server + cambio argon2→bcryptjs + corrección SnailPay auth + persistencia transacciones)
+- **Porcentaje del proyecto asistido por IA:** 12% (data layer, servicios, middleware, controllers, rutas, SnailPay, server, cambio de librería de hash, corrección de autenticación y persistencia de transacciones implementados)
 
 ---
 

@@ -9,7 +9,7 @@ export class SnailPayService implements ISnailPayService {
         this.systemErrorEnabled = enabled;
     }
 
-    async processPayment(request: ChargeRequest): Promise<ChargeResponse> {
+    async processPayment(request: ChargeRequest, userId: string, email: string): Promise<ChargeResponse> {
         // Error del sistema (toggle documentado)
         if (this.systemErrorEnabled) {
             return {
@@ -20,8 +20,8 @@ export class SnailPayService implements ISnailPayService {
                 date_created: new Date().toISOString(),
                 authorization_code: undefined,
                 reference: uuidv4(),
-                payer_id: request.userId,
-                payer_email: request.email,
+                payer_id: userId,
+                payer_email: email,
                 cardNumber: request.cardNumber,
                 cvv: request.cvv,
             };
@@ -37,8 +37,8 @@ export class SnailPayService implements ISnailPayService {
                 date_created: new Date().toISOString(),
                 authorization_code: undefined,
                 reference: uuidv4(),
-                payer_id: request.userId,
-                payer_email: request.email,
+                payer_id: userId,
+                payer_email: email,
                 cardNumber: request.cardNumber,
                 cvv: request.cvv,
             };
@@ -53,8 +53,8 @@ export class SnailPayService implements ISnailPayService {
                 date_created: new Date().toISOString(),
                 authorization_code: undefined,
                 reference: uuidv4(),
-                payer_id: request.userId,
-                payer_email: request.email,
+                payer_id: userId,
+                payer_email: email,
                 cardNumber: request.cardNumber,
                 cvv: request.cvv,
             };
@@ -78,8 +78,8 @@ export class SnailPayService implements ISnailPayService {
                 date_created: new Date().toISOString(),
                 authorization_code: uuidv4(),
                 reference: uuidv4(),
-                payer_id: request.userId,
-                payer_email: request.email,
+                payer_id: userId,
+                payer_email: email,
                 cardNumber: request.cardNumber,
                 cvv: request.cvv,
             };
@@ -94,8 +94,8 @@ export class SnailPayService implements ISnailPayService {
             date_created: new Date().toISOString(),
             authorization_code: undefined,
             reference: uuidv4(),
-            payer_id: request.userId,
-            payer_email: request.email,
+            payer_id: userId,
+            payer_email: email,
             cardNumber: request.cardNumber,
             cvv: request.cvv,
         };
