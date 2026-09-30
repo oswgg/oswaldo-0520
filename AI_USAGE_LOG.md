@@ -574,16 +574,183 @@ El usuario solicitó que los controladores usen los tipos de retorno definidos e
 
 ---
 
+### 2026-09-29 - Implementación de SnailPay (mock de pasarela de pagos)
+
+**Tipo:** Creación
+**Solicitado por:** Usuario
+**Estado:** Completado
+
+**Descripción:**
+Implementar el servicio mock de pasarela de pagos SnailPay según las especificaciones del PDF de requerimientos:
+
+**DTOs (paquete dtos/):**
+- dtos/src/snailpay/req/charge.request.ts (cardNumber, expiryDate, cvv, fullName, amount, userId, email)
+- dtos/src/snailpay/res/charge.response.ts (id, status, status_detail, transaction_amount, date_created, authorization_code, reference, payer_id, payer_email, cardNumber, cvv)
+
+**Backend:**
+- backend/src/interfaces/ISnailPayService.ts (interfaz intercambiable)
+- backend/src/services/SnailPayService.ts (implementación mock)
+
+**Escenarios según PDF:**
+1. Cobro exitoso: tarjeta 1234123412341234, expiry 12/26, cvv 543, nombre no vacío, monto > 0
+2. Error de transacción: datos inválidos (tarjeta no match, cvv incorrecto, monto <= 0, nombre vacío)
+3. Error del sistema: toggle documentado (método setSystemError)
+
+**Resultado:**
+DTOs creados:
+- dtos/src/snailpay/req/charge.request.ts (interface con 7 campos)
+- dtos/src/snailpay/res/charge.response.ts (interface con 11 campos incluyendo cardNumber y cvv)
+- dtos/src/index.ts actualizado para exportar SnailPay DTOs
+- Build de dtos/ ejecutado exitosamente
+
+Backend creado:
+- backend/src/interfaces/ISnailPayService.ts (interface con processPayment y setSystemError)
+- backend/src/services/SnailPayService.ts (implementación mock con los 3 escenarios)
+
+Escenarios implementados:
+1. Cobro exitoso: tarjeta 1234123412341234, expiry 12/26, cvv 543, nombre no vacío, monto > 0 → status: approved
+2. Error de transacción:
+   - Nombre vacío → status: rejected, status_detail: Invalid cardholder name
+   - Monto <= 0 → status: rejected, status_detail: Invalid amount
+   - Tarjeta/CVV no coinciden → status: rejected, status_detail: Invalid card details
+3. Error del sistema: setSystemError(true) → status: error, status_detail: System error
+
+Todas las respuestas incluyen cardNumber y cvv según requisito del PDF.
+
+**Archivos afectados:**
+- dtos/src/snailpay/req/charge.request.ts (creado)
+- dtos/src/snailpay/res/charge.response.ts (creado)
+- dtos/src/index.ts (modificado - exportar SnailPay DTOs)
+- backend/src/interfaces/ISnailPayService.ts (creado)
+- backend/src/services/SnailPayService.ts (creado)
+
+**Código generado por IA:**
+- Contenido de charge.request.ts (interface con 7 campos)
+- Contenido de charge.response.ts (interface con 11 campos)
+- Modificación de index.ts (agregadas 2 líneas de export)
+- Contenido de ISnailPayService.ts (interface con 2 métodos)
+- Contenido de SnailPayService.ts (~90 líneas con implementación completa de los 3 escenarios)
+
+**Justificación del uso de IA:**
+El usuario solicitó implementar SnailPay según las especificaciones del PDF de requerimientos. La IA implementó los DTOs, interfaz y servicio mock con los 3 escenarios documentados (cobro exitoso, error de transacción, error del sistema) siguiendo la arquitectura híbrida con DI y Strategy Pattern para facilitar intercambio por pasarela real en el futuro.
+
+---
+
+### 2026-09-29 - Implementación de controller y rutas para SnailPay
+
+**Tipo:** Creación
+**Solicitado por:** Usuario
+**Estado:** Completado
+
+**Descripción:**
+Implementar el controller y rutas para SnailPay según la arquitectura híbrida:
+
+**Controller:**
+- backend/src/controllers/SnailPayController.ts
+- Método charge para procesar pagos
+- DI de ISnailPayService e IUserRepository
+- Lógica: procesar pago, si exitoso actualizar saldo del usuario
+
+**Rutas:**
+- backend/src/routes/snailpay.routes.ts
+- POST /api/snailpay/charge
+- DI manual de SnailPayService
+
+**Repositorio:**
+- No fue necesario agregar updateBalance ya que existe método update genérico
+
+**Server:**
+- backend/src/server.ts (creado como punto de entrada Express)
+
+**Resultado:**
+Controller creado:
+- backend/src/controllers/SnailPayController.ts (~75 líneas)
+- Método charge con validaciones básicas
+- Verificación de usuario y email
+- Procesamiento de pago via SnailPayService
+- Actualización de saldo si paymentResponse.status === 'approved'
+- Manejo de errores
+
+Rutas creadas:
+- backend/src/routes/snailpay.routes.ts (~20 líneas)
+- POST /api/snailpay/charge conectada a SnailPayController
+- DI manual de SnailPayService y JsonUserRepository
+
+Server creado:
+- backend/src/server.ts (~25 líneas)
+- Configuración Express con CORS y JSON middleware
+- Rutas /api/auth y /api/snailpay integradas
+- Health check endpoint
+- Servidor escuchando en puerto 3000 (configurable via PORT env var)
+
+**Archivos afectados:**
+- backend/src/controllers/SnailPayController.ts (creado)
+- backend/src/routes/snailpay.routes.ts (creado)
+- backend/src/server.ts (creado)
+
+**Código generado por IA:**
+- Contenido de SnailPayController.ts (~75 líneas con implementación completa de charge)
+- Contenido de snailpay.routes.ts (~20 líneas con DI manual y ruta charge)
+- Contenido de server.ts (~25 líneas con configuración Express y rutas)
+
+**Justificación del uso de IA:**
+El usuario solicitó implementar las rutas y controladores para SnailPay. La IA implementó el controller con DI manual y las rutas conectadas, siguiendo el patrón establecido en AuthController y la arquitectura híbrida documentada. También creó el server.ts como punto de entrada del backend Express.
+
+---
+
+### 2026-09-29 - Cambio de argon2 a bcryptjs por simplicidad
+
+**Tipo:** Modificación
+**Solicitado por:** Usuario (preferir simplicidad sobre problemas de compilación)
+**Estado:** Completado
+
+**Descripción:**
+Cambiar de argon2 a bcryptjs por decisión del usuario de priorizar la simplicidad del sistema sobre los problemas que pueda ocasionar la compilación de módulos nativos. Aunque argon2 es más seguro, bcryptjs es una implementación pura en JavaScript que:
+- No requiere compilación nativa
+- No depende de herramientas de build
+- Es suficientemente seguro para el scope de una prueba técnica
+- Mantiene el patrón Strategy Pattern con la interfaz IPasswordHasher
+
+**Resultado:**
+- backend/package.json modificado: argon2 reemplazado por bcryptjs, @types/bcryptjs agregado
+- backend/src/services/PasswordHasher/BcryptHasher.ts creado (implementación de IPasswordHasher con bcrypt)
+- backend/src/services/PasswordHasher/Argon2Hasher.ts eliminado (código no utilizado)
+- backend/src/services/PasswordHasher/index.ts actualizado para exportar solo BcryptHasher
+- backend/src/routes/auth.routes.ts actualizado para usar BcryptHasher
+- SYSTEM_CONTEXT.md actualizado con nota sobre la decisión
+- node_modules eliminado y reinstalado exitosamente
+- Backend corriendo correctamente en puerto 3000
+
+**Archivos afectados:**
+- backend/package.json (modificado - argon2 → bcryptjs, @types/bcryptjs agregado)
+- backend/src/services/PasswordHasher/BcryptHasher.ts (creado)
+- backend/src/services/PasswordHasher/Argon2Hasher.ts (eliminado)
+- backend/src/services/PasswordHasher/index.ts (modificado)
+- backend/src/routes/auth.routes.ts (modificado - Argon2Hasher → BcryptHasher)
+- SYSTEM_CONTEXT.md (modificado - nota sobre cambio a bcryptjs)
+
+**Código generado por IA:**
+- Modificación de package.json (reemplazo de dependencias)
+- Contenido de BcryptHasher.ts (~15 líneas con implementación bcrypt)
+- Modificación de index.ts (export actualizado)
+- Modificación de auth.routes.ts (cambio de import y DI)
+- Modificación de SYSTEM_CONTEXT.md (nota sobre decisión de bcryptjs)
+
+**Justificación del uso de IA:**
+El usuario solicitó cambiar de argon2 a bcryptjs por simplicidad, prefiriendo evitar problemas de compilación que pueda ocasionar argon2. La IA implementó el cambio, eliminó el código de argon2 no utilizado y documentó la decisión en SYSTEM_CONTEXT.md explicando que se mantiene la arquitectura híbrida intacta (interfaz IPasswordHasher intercambiable) mientras se simplifica el setup del proyecto.
+
+---
+
 ## Estadísticas
 
-- **Total de acciones registradas:** 12
-- **Acciones completadas:** 12
+- **Total de acciones registradas:** 15
+- **Acciones completadas:** 15
 - **Acciones rechazadas:** 0
-- **Archivos creados:** 26
-- **Archivos modificados:** 9
-- **Archivos eliminados:** 1
-- **Líneas de código generadas:** ~1335 (documentación + .gitignore + configs + DTOs + rutas + arquitectura + data layer + servicios + middleware + controllers + eliminación logout + conexión rutas)
-- **Porcentaje del proyecto asistido por IA:** 8% (data layer, servicios, middleware, controllers y rutas implementados)
+- **Archivos creados:** 34
+- **Archivos modificados:** 14
+- **Archivos eliminados:** 2
+- **Líneas de código generadas:** ~1580 (documentación + .gitignore + configs + DTOs + rutas + arquitectura + data layer + servicios + middleware + controllers + eliminación logout + conexión rutas + SnailPay DTOs + SnailPay service + SnailPay controller + SnailPay routes + server + cambio argon2→bcryptjs)
+- **Porcentaje del proyecto asistido por IA:** 10% (data layer, servicios, middleware, controllers, rutas, SnailPay, server y cambio de librería de hash implementados)
 
 ---
 
