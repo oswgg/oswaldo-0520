@@ -356,6 +356,8 @@ El despliegue se considera como tarea adicional atractiva pero depende del tiemp
 6. **Arquitectura en capas** - Para separación de responsabilidades y mantenibilidad
 7. **Tecnologías sin excepciones** - Por requerimiento del PDF de prueba técnica
 
+8. **Despliegue en Dokploy con dos contenedores** (backend Express + frontend nginx), Dockerfiles con contexto en la raíz por `dtos/`. Sin volumen: los JSON semilla se incluyen en la imagen y se reinician en cada redespliegue. Ver `DEPLOYMENT.md`.
+
 ### Decisiones Pendientes
 - Librerías adicionales (gráficas, formularios, UI)
 - Estrategia de testing

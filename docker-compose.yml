@@ -1,0 +1,26 @@
+# Despliegue con Dokploy (tipo "Compose") o local: docker compose up --build
+# Los dominios se asignan desde la UI de Dokploy (backend -> 3000, frontend -> 80).
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    restart: unless-stopped
+    environment:
+      PORT: 3000
+      JWT_SECRET: ${JWT_SECRET:?Define JWT_SECRET}
+      CORS_ORIGIN: ${CORS_ORIGIN:-}
+    expose:
+      - "3000"
+
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+      args:
+        VITE_API_BASE_URL: ${VITE_API_BASE_URL:?Define VITE_API_BASE_URL}
+    restart: unless-stopped
+    expose:
+      - "80"
+    depends_on:
+      - backend

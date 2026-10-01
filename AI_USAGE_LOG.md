@@ -7,6 +7,28 @@
 
 ## Registro de Acciones
 
+### 2026-09-30 - Preparar despliegue en Dokploy con Dockerfiles
+
+**Tipo:** Creación/Modificación
+**Solicitado por:** Usuario (opción 2: dos contenedores; sin volumen, datos semilla incluidos en la imagen)
+**Estado:** Completado
+
+**Descripción:**
+Crear backend/Dockerfile y frontend/Dockerfile (contexto de build = raíz, por la dependencia file:../dtos), .dockerignore, docker-compose.yml, .env.example y DEPLOYMENT.md. Modificar backend/src/server.ts para restringir CORS vía CORS_ORIGIN. Los JSON semilla (backend/src/data) se copian a dist/data dentro de la imagen; sin volumen persistente.
+
+**Resultado:**
+Ambas imágenes construidas y probadas con Docker (health OK, fallback SPA OK, datos semilla en dist/data, usuario no root). Se eliminó nginx.conf a petición del usuario (config inline en el Dockerfile). Se corrigió backend/tsconfig.json (declaration=false) porque `pnpm build` fallaba con TS2742.
+
+**Archivos afectados:**
+- backend/Dockerfile, frontend/Dockerfile (con config nginx inline), .dockerignore, docker-compose.yml, .env.example, DEPLOYMENT.md (nuevos)
+- backend/src/server.ts, backend/tsconfig.json (declaration=false, el build fallaba con TS2742), SYSTEM_CONTEXT.md (modificados)
+
+**Código generado por IA:**
+Todos los archivos listados
+
+**Justificación del uso de IA:**
+Automatizar la configuración de contenedores y documentar el despliegue.
+
 ### 2026-09-30 - Agregar comando `pnpm dev` en la raíz para levantar backend y frontend
 
 **Tipo:** Creación/Modificación
@@ -2042,12 +2064,12 @@ El usuario pidió trabajar en la herramienta de tests del frontend. La IA revis�
 
 ## Estadísticas
 
-- **Total de acciones registradas:** 34
-- **Acciones completadas:** 34
+- **Total de acciones registradas:** 35
+- **Acciones completadas:** 35
 - **Acciones pendientes:** 0
 - **Acciones rechazadas:** 0
-- **Archivos creados:** 56
-- **Archivos modificados:** 40
+- **Archivos creados:** 62
+- **Archivos modificados:** 44
 - **Archivos eliminados:** 2
 - **Líneas de código generadas:** ~3183 (documentación + .gitignore + configs + DTOs + rutas + arquitectura + data layer + servicios + middleware + controllers + eliminación logout + conexión rutas + SnailPay DTOs + SnailPay service + SnailPay controller + SnailPay routes + server + cambio argon2→bcryptjs + corrección SnailPay auth + persistencia transacciones + pruebas unitarias + arquitectura frontend + frontend pages + frontend data layer + corrección persistencia sesión + eliminación balance backend + modificación SnailPay sin persistencia + integración modal recarga + implementación gráficas Recharts + datos simulados carreras + corrección routing + corrección hooks + flujo apuestas dashboard)
 - **Porcentaje del proyecto asistido por IA:** 20% (data layer, servicios, middleware, controllers, rutas, SnailPay, server, cambio de librería de hash, corrección de autenticación, persistencia de transacciones, pruebas unitarias, arquitectura frontend, pages y data layer del frontend, corrección de persistencia de sesión, eliminación de balance del backend, modificación de SnailPay sin persistencia, integración modal de recarga, implementación de gráficas con Recharts, datos simulados de carreras, corrección routing SPA, corrección orden hooks, flujo de apuestas en dashboard implementados)

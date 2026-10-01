@@ -7,7 +7,9 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 // Middleware
-app.use(cors());
+// CORS_ORIGIN: orígenes permitidos separados por coma; vacío = cualquier origen
+const corsOrigins = process.env.CORS_ORIGIN?.split(',').map((o) => o.trim()).filter(Boolean);
+app.use(cors({ origin: corsOrigins?.length ? corsOrigins : true }));
 app.use(express.json());
 
 // Routes

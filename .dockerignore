@@ -1,0 +1,16 @@
+**/node_modules
+**/dist
+**/coverage
+.git
+.gitignore
+.devin
+.vscode
+.idea
+**/.env
+**/.env.*
+!**/.env.example
+**/*.log
+**/.DS_Store
+BRUNO-WORKSPACE
+*.pdf
+AI_USAGE_LOG.md
