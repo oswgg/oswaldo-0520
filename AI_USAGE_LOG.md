@@ -2040,14 +2040,36 @@ Ninguno (solo lectura de archivos y esta entrada de registro)
 **Justificación del uso de IA:**
 El usuario pidió trabajar en la herramienta de tests del frontend. La IA revisó el contexto del proyecto y prepara una propuesta para que el usuario decida.
 
+### 2026-09-30 - Creación de README.md para ejecutar el proyecto
+
+**Tipo:** Creación
+**Solicitado por:** Usuario
+**Estado:** Completado
+
+**Descripción:**
+El usuario pidió crear el README para ejecutar el proyecto y confirmó el alcance completo (descripción, requisitos, instalación, ejecución, variables de entorno, datos, SnailPay, pruebas y documentación). Se leyeron SYSTEM_CONTEXT.md, los package.json, server.ts, vite.config.ts, .env del frontend y SnailPayService.ts para que el contenido refleje el código real.
+
+**Resultado:**
+Se creó README.md en la raíz del proyecto.
+
+**Archivos afectados:**
+- README.md (creado)
+- AI_USAGE_LOG.md (modificado, esta entrada y estadísticas)
+
+**Código generado por IA:**
+README.md completo (~110 líneas de documentación, sin código ejecutable)
+
+**Justificación del uso de IA:**
+Redactar documentación a partir de la configuración existente del proyecto.
+
 ## Estadísticas
 
-- **Total de acciones registradas:** 34
-- **Acciones completadas:** 34
+- **Total de acciones registradas:** 35
+- **Acciones completadas:** 35
 - **Acciones pendientes:** 0
 - **Acciones rechazadas:** 0
-- **Archivos creados:** 56
-- **Archivos modificados:** 40
+- **Archivos creados:** 57
+- **Archivos modificados:** 41
 - **Archivos eliminados:** 2
 - **Líneas de código generadas:** ~3183 (documentación + .gitignore + configs + DTOs + rutas + arquitectura + data layer + servicios + middleware + controllers + eliminación logout + conexión rutas + SnailPay DTOs + SnailPay service + SnailPay controller + SnailPay routes + server + cambio argon2→bcryptjs + corrección SnailPay auth + persistencia transacciones + pruebas unitarias + arquitectura frontend + frontend pages + frontend data layer + corrección persistencia sesión + eliminación balance backend + modificación SnailPay sin persistencia + integración modal recarga + implementación gráficas Recharts + datos simulados carreras + corrección routing + corrección hooks + flujo apuestas dashboard)
 - **Porcentaje del proyecto asistido por IA:** 20% (data layer, servicios, middleware, controllers, rutas, SnailPay, server, cambio de librería de hash, corrección de autenticación, persistencia de transacciones, pruebas unitarias, arquitectura frontend, pages y data layer del frontend, corrección de persistencia de sesión, eliminación de balance del backend, modificación de SnailPay sin persistencia, integración modal de recarga, implementación de gráficas con Recharts, datos simulados de carreras, corrección routing SPA, corrección orden hooks, flujo de apuestas en dashboard implementados)
