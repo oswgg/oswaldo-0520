@@ -7,6 +7,28 @@
 
 ## Registro de Acciones
 
+### 2026-09-30 - Agregar comando `pnpm dev` en la raíz para levantar backend y frontend
+
+**Tipo:** Creación/Modificación
+**Solicitado por:** Usuario (opción A elegida tras propuesta de la IA)
+**Estado:** Completado
+
+**Descripción:**
+Crear `pnpm-workspace.yaml` en la raíz (packages: backend, frontend) y agregar el script `dev` en el `package.json` raíz: `pnpm --parallel --filter ./backend --filter ./frontend dev`. Solo usa pnpm, sin librerías nuevas.
+
+**Resultado:**
+`pnpm dev` desde la raíz levanta backend (puerto 3000) y frontend (Vite, puerto 5173) en paralelo. Verificado.
+
+**Archivos afectados:**
+- pnpm-workspace.yaml (nuevo)
+- package.json (modificado)
+
+**Código generado por IA:**
+Archivo de workspace y script `dev`
+
+**Justificación del uso de IA:**
+Automatizar la configuración del script de desarrollo combinado.
+
 ### 2026-09-30 - Investigación de problema de persistencia de sesión
 
 **Tipo:** Análisis/Investigación
@@ -2020,12 +2042,12 @@ El usuario pidió trabajar en la herramienta de tests del frontend. La IA revis�
 
 ## Estadísticas
 
-- **Total de acciones registradas:** 33
-- **Acciones completadas:** 33
+- **Total de acciones registradas:** 34
+- **Acciones completadas:** 34
 - **Acciones pendientes:** 0
 - **Acciones rechazadas:** 0
-- **Archivos creados:** 55
-- **Archivos modificados:** 38
+- **Archivos creados:** 56
+- **Archivos modificados:** 40
 - **Archivos eliminados:** 2
 - **Líneas de código generadas:** ~3183 (documentación + .gitignore + configs + DTOs + rutas + arquitectura + data layer + servicios + middleware + controllers + eliminación logout + conexión rutas + SnailPay DTOs + SnailPay service + SnailPay controller + SnailPay routes + server + cambio argon2→bcryptjs + corrección SnailPay auth + persistencia transacciones + pruebas unitarias + arquitectura frontend + frontend pages + frontend data layer + corrección persistencia sesión + eliminación balance backend + modificación SnailPay sin persistencia + integración modal recarga + implementación gráficas Recharts + datos simulados carreras + corrección routing + corrección hooks + flujo apuestas dashboard)
 - **Porcentaje del proyecto asistido por IA:** 20% (data layer, servicios, middleware, controllers, rutas, SnailPay, server, cambio de librería de hash, corrección de autenticación, persistencia de transacciones, pruebas unitarias, arquitectura frontend, pages y data layer del frontend, corrección de persistencia de sesión, eliminación de balance del backend, modificación de SnailPay sin persistencia, integración modal de recarga, implementación de gráficas con Recharts, datos simulados de carreras, corrección routing SPA, corrección orden hooks, flujo de apuestas en dashboard implementados)
