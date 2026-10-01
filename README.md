@@ -10,6 +10,9 @@ Es un monorepo gestionado con **pnpm workspaces**:
 | Frontend | `frontend/` | SPA con React + TypeScript + Vite |
 | DTOs | `dtos/` | Tipos TypeScript compartidos (`@oswaldo/dtos`) |
 
+## Acceso En Línea
+Este proyecto se encuentra desplegado en un VPS propio gestionado con [Dokploy](https://dokploy.com). Accesible en [oswaldo.20040521.xyz](https://oswaldo.20040521.xyz)
+
 ## Requisitos
 
 - [Node.js](https://nodejs.org/) 18 o superior
